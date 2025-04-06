@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkvue2_7_project"]=self["webpackChunkvue2_7_project"]||[]).push([[396],{8396:function(u,e,n){n.r(e),n.d(e,{default:function(){return f}});var t=function(){var u=this,e=u._self._c;return e("div",[u._v("食物详情")])},r=[],l=n(1656),c={},s=(0,l.A)(c,t,r,!1,null,null,null),f=s.exports}}]);
+//# sourceMappingURL=396.e413073d.js.map
