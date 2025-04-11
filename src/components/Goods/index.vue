@@ -8,7 +8,7 @@
             v-for="(it, index) in list"
             :key="index"
             class="menu-item"
-            :class="[false && 'active-menu-item']"
+            :class="[activeIndex === index ? 'active-menu-item' : '']"
             @click="selectMenu(index)"
           >
             <span>{{ it.name }}</span>
@@ -27,7 +27,7 @@
                 :class="[false && 'active-foods-item']"
               >
                 <div class="icon">
-                  <img :src="food.icon" width="57" height="57" alt="" />
+                  <img v-lazy="food.icon" width="57" height="57" alt="" />
                 </div>
                 <div class="container">
                   <div class="name">{{ food.name }}</div>
@@ -41,7 +41,15 @@
                     <span v-show="false" class="old">{{ `￥${food.oldPrice}` }}</span>
                   </div>
                   <div class="cart-control-wrapper">
-                    <ContRol :food="food" @increase="increase(id, index)" @decrease="decrease(id, index)" />
+                    <ContRol
+                      :food="food"
+                      @increase="
+                        (e) => {
+                          increase(id, index, e)
+                        }
+                      "
+                      @decrease="decrease(id, index)"
+                    />
                   </div>
                 </div>
               </div>
@@ -52,7 +60,7 @@
     </div>
     <!-- 购物车 -->
     <div class="shop-car-wrapper">
-      <ShopCar />
+      <ShopCar ref="shopCar" :select-foods="selectFoods" />
     </div>
   </div>
 </template>
@@ -62,6 +70,7 @@ import Vue from 'vue'
 import EleScroll from '@/components/EleScroll'
 import ShopCar from '@/components/ShopCar'
 import ContRol from '@/components/ContRol'
+
 export default {
   name: 'Goods',
   components: {
@@ -71,41 +80,59 @@ export default {
   },
   data() {
     return {
+      test: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
+      activeIndex: 0,
       list: []
     }
   },
-  created() {
-    this.fetchData()
+  computed: {
+    selectFoods() {
+      const foods = []
+      this.list.forEach((goods) => {
+        goods.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
+    }
+  },
+  created() {},
+  async mounted() {
+    await this.fetchData()
+    // this.lazyImg()
   },
   methods: {
     async fetchData() {
       try {
-        const response = await fetch('/api/goods', {
+        const response = await fetch('api/goods.json', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
           }
         })
-        const { data, errno } = await response.json()
-        if (errno === 0 && data) {
-          this.list = data
+        const { goods, errno } = await response.json()
+        if (errno === 0 && goods) {
+          this.list = goods
         }
-        console.log(this.list)
       } catch (_e) {
         this.list = null
       }
     },
     selectMenu(index) {
       this.$refs.foods.scrollToElement(this.$refs.food[index], 200)
+      this.activeIndex = index
     },
     // 减少
-    increase(id, index) {
+    increase(id, index, e) {
       if (this.list[id]['foods'][index].count) {
         this.list[id]['foods'][index].count++
       } else {
         // 动态添加响应式数据
         Vue.set(this.list[id]['foods'][index], 'count', 1)
       }
+      this.$refs.shopCar.drop(e)
     },
     // 添加
     decrease(id, index) {
@@ -113,6 +140,15 @@ export default {
         this.list[id]['foods'][index].count--
       }
     }
+    // lazyImg() {
+    //   const observer = new IntersectionObserver((entries, observer) => {
+    //     console.log(entries, observer)
+    //   })
+    //   this.$refs.imgDom.forEach((el) => {
+    //     observer.observe(el)
+    //   })
+    //   // observer()
+    // }
   }
 }
 </script>
@@ -164,6 +200,7 @@ export default {
 .foods-item .container .extra span {
   font-size: 10px;
   color: #999;
+  padding-right: 8px;
 }
 .foods-item .container .description {
   font-size: 10px;

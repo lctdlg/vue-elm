@@ -26,7 +26,7 @@
       <div v-show="food?.count > 0" class="cart-count">{{ food.count }}</div>
     </Transition>
     <!-- stop 阻止冒泡 在子组件注册的事件会传播到父组件 prevent阻止默认原生事件 比如a标签的跳转 -->
-    <div class="cart-add" @click.stop="_increase">
+    <div class="cart-add" @click="_increase">
       <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
@@ -76,8 +76,8 @@ export default {
     leaveCancelled: function (el) {
       // ...
     },
-    _increase() {
-      this.$emit('increase')
+    _increase(e) {
+      this.$emit('increase', e.target)
     },
     _decrease() {
       this.$emit('decrease')

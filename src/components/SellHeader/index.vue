@@ -73,15 +73,15 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const response = await fetch('/api/seller', {
+        const response = await fetch('/api/seller.json', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
           }
         })
-        const { data, errno } = await response.json()
-        if (errno === 0 && data) {
-          this.seller = data
+        const { seller, errno } = await response.json()
+        if (errno === 0 && seller) {
+          this.seller = seller
         }
       } catch {
         this.seller = null

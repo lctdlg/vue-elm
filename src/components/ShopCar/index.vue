@@ -1,9 +1,9 @@
 <template>
   <div class="shop-car">
-    <div class="container">
+    <div class="container" @click="toggleList">
       <div class="container-left">
         <div class="car-wrapper">
-          <div class="car">
+          <div :class="['car', carClass]">
             <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M39 32H13L8 12H44L39 32Z" fill="#999" />
               <path
@@ -33,31 +33,171 @@
               />
             </svg>
           </div>
+          <div class="count-wrapper">
+            <div class="count">{{ count }}</div>
+          </div>
         </div>
-        <div class="price">￥50</div>
+        <div class="price">￥{{ totalPrice }}</div>
         <div class="desc">另需配送费￥4元</div>
       </div>
-      <div class="container-right">
-        <div class="pay">{{ payDesc }}</div>
+      <div class="container-right" @click="handlePay">
+        <div class="pay" :class="[totalPrice >= 20 ? 'pay-light' : '']">{{ payDesc }}</div>
+      </div>
+    </div>
+    <div class="ball-container">
+      <div v-for="(ball, index) in balls" :key="index">
+        <Transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+          <div v-show="ball.show" class="ball">
+            <div class="inner inner-hook"></div>
+          </div>
+        </Transition>
       </div>
     </div>
   </div>
 </template>
 <script>
+const BALL_LEN = 10
+function createBalls() {
+  const balls = []
+  for (let i = 0; i < BALL_LEN; i++) {
+    balls.push({
+      show: false
+    })
+  }
+  return balls
+}
 export default {
   name: 'ShopCar',
-  computed: {
-    payDesc() {
-      return '￥20元起送'
+  props: {
+    selectFoods: {
+      type: Array,
+      default: () => []
     }
   },
-  methods: {}
+  data() {
+    return {
+      show: false,
+      balls: createBalls(),
+      dropBalls: []
+    }
+  },
+  computed: {
+    totalPrice() {
+      let price = 0
+      this.selectFoods.forEach((it) => {
+        price += it.count * it.price
+      })
+      return price
+    },
+    count() {
+      let num = 0
+      this.selectFoods.forEach((it) => {
+        num += it.count
+      })
+      return num
+    },
+    payDesc() {
+      if (this.totalPrice === 0) {
+        return '￥20元起送'
+      } else if (this.totalPrice < 20) {
+        return `还差￥${20 - this.totalPrice}元起送`
+      }
+      return '去结算'
+    },
+    carClass() {
+      if (this.count) {
+        return 'car-light'
+      }
+      return ''
+    }
+  },
+  methods: {
+    drop(e) {
+      for (let i = 0; i < this.balls.length; i++) {
+        const ball = this.balls[i]
+        if (!ball.show) {
+          ball.show = true
+          ball.el = e
+          this.dropBalls.push(ball)
+          return
+        }
+      }
+    },
+    handlePay() {
+      if (this.totalPrice >= 20) {
+        alert('请先登录')
+      }
+    },
+    // 打开列表
+    toggleList() {
+      // if (this.count) {
+      // }
+    },
+    // 进入中
+    beforeEnter(e) {
+      const ball = this.dropBalls[this.dropBalls.length - 1]
+      const rect = ball.el.getBoundingClientRect()
+      const x = rect.left - 32
+      const y = -(window.innerHeight - rect.top - 22)
+      e.style.display = ''
+      /**
+       * translate3d可以开启GPU加速
+       */
+      e.style.webkitTransform = `translate3d(0,${y}px,0)`
+      e.style.transform = `translate3d(0,${y}px,0)`
+      const inner = e.querySelector('.inner-hook')
+      inner.style.webkitTransform = `translate3d(${x}px,0,0)`
+      inner.style.transform = `translate3d(${x}px,0,0)`
+      console.log(x, y, inner, e)
+    },
+    // done设置完成
+    enter(e, done) {
+      this._reflow = document.body.offsetHeight
+      e.style.webkitTransform = `translate3d(0,0,0)`
+      e.style.transform = `translate3d(0,0,0)`
+      const inner = e.querySelector('.inner-hook')
+      inner.style.webkitTransform = `translate3d(0,0,0)`
+      inner.style.transform = `translate3d(0,0,0)`
+      // 使用js设置了动画效果 必须设置监听完成transitionend 过渡事件 再进行done回调 或者会立即同步调用 也就是立刻完成过渡
+      e.addEventListener('transitionend', () => {
+        console.log(1212)
+        done()
+      })
+    },
+    // 完成后
+    afterEnter(e) {
+      const ball = this.dropBalls.shift()
+      // 球的状态关闭 dom随之display = 'none 加上也可以
+      ball.show = false
+      e.style.display = 'none'
+    }
+  }
 }
 </script>
 <style scoped>
 .shop-car {
   width: 100%;
   height: 100%;
+}
+.ball-container .ball {
+  position: fixed;
+  left: 32px;
+  /* right: 0; */
+  /* top: 0; */
+  bottom: 22px;
+  /* top: 30px; */
+  z-index: 200;
+  /**
+  过渡效果 贝塞尔曲线动画效果
+   */
+  transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41);
+}
+.ball-container .ball .inner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f01414;
+  transition: all 0.4s linear;
 }
 .shop-car .container {
   width: 100%;
@@ -89,6 +229,32 @@ export default {
   align-items: center;
   justify-content: center;
 }
+.car-wrapper .car-light {
+  /* background: #00a0dc; */
+  background: #f01414;
+}
+.car-light svg,
+svg circle,
+svg path {
+  fill: #fff;
+  stroke: #fff;
+}
+.car-wrapper .count-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.count-wrapper .count {
+  font-size: 10px;
+  height: 16px;
+  line-height: 16px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #fc9153, #f01414);
+  padding: 0 5px;
+  border-radius: 16px;
+  text-align: center;
+}
 .container-left .price {
   display: inline-block;
   font-size: 16px;
@@ -116,5 +282,9 @@ export default {
   line-height: 48px;
   text-align: center;
   background: #333;
+}
+.container-right .pay-light {
+  background: #00b43c;
+  color: #fff;
 }
 </style>
