@@ -73,7 +73,7 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const response = await fetch('/api/seller.json', {
+        const response = await fetch('api/seller.json', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
