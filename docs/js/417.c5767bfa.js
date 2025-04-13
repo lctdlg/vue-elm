@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkvue2_7_project"]=self["webpackChunkvue2_7_project"]||[]).push([[417],{8417:function(e,u,n){n.r(u),n.d(u,{default:function(){return f}});var l=function(){var e=this,u=e._self._c;return u("div",[e._v("seller")])},r=[],t=n(1656),c={},s=(0,t.A)(c,l,r,!1,null,null,null),f=s.exports}}]);
-//# sourceMappingURL=417.c5767bfa.js.map

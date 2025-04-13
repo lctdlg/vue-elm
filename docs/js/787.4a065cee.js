@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkvue2_7_project"]=self["webpackChunkvue2_7_project"]||[]).push([[787],{5168:function(u,e,n){n.r(e),n.d(e,{default:function(){return f}});var r=function(){var u=this,e=u._self._c;return e("div",[u._v("ragings")])},t=[],l=n(1656),c={},s=(0,l.A)(c,r,t,!1,null,null,null),f=s.exports}}]);
-//# sourceMappingURL=787.4a065cee.js.map
