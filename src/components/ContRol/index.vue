@@ -54,13 +54,9 @@ export default {
   },
   methods: {
     // 进入前
-    beforeEnter(el) {
-      // console.log(el, '==')
-    },
+    beforeEnter(el) {},
     // 进入了
-    enter(el, done) {
-      // console.log(el, '==', done)
-    },
+    enter(el, done) {},
     afterEnter() {},
     enterCancelled() {},
     // 移出前

@@ -148,7 +148,6 @@ export default {
       const inner = e.querySelector('.inner-hook')
       inner.style.webkitTransform = `translate3d(${x}px,0,0)`
       inner.style.transform = `translate3d(${x}px,0,0)`
-      console.log(x, y, inner, e)
     },
     // done设置完成
     enter(e, done) {
@@ -159,10 +158,7 @@ export default {
       inner.style.webkitTransform = `translate3d(0,0,0)`
       inner.style.transform = `translate3d(0,0,0)`
       // 使用js设置了动画效果 必须设置监听完成transitionend 过渡事件 再进行done回调 或者会立即同步调用 也就是立刻完成过渡
-      e.addEventListener('transitionend', () => {
-        console.log(1212)
-        done()
-      })
+      e.addEventListener('transitionend', done)
     },
     // 完成后
     afterEnter(e) {
@@ -182,10 +178,7 @@ export default {
 .ball-container .ball {
   position: fixed;
   left: 32px;
-  /* right: 0; */
-  /* top: 0; */
   bottom: 22px;
-  /* top: 30px; */
   z-index: 200;
   /**
   过渡效果 贝塞尔曲线动画效果
@@ -230,7 +223,6 @@ export default {
   justify-content: center;
 }
 .car-wrapper .car-light {
-  /* background: #00a0dc; */
   background: #f01414;
 }
 .car-light svg,

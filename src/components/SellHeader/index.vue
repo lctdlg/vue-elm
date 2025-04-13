@@ -1,6 +1,6 @@
 <template>
   <div v-if="seller" class="header">
-    <div class="content-wrapper" @click.stop.prevent="handleDialog">
+    <div class="content-wrapper" @click.stop.prevent="openDialog">
       <div class="avatar">
         <img :src="seller.avatar" width="100%" height="100%" alt="" />
       </div>
@@ -39,7 +39,7 @@
       <img :src="seller.avatar" width="100%" height="100%" alt="" />
     </div>
     <!-- 弹窗 -->
-    <div v-if="dialog" class="dialog-wrapper">
+    <div v-if="dialog" v-disableBack class="dialog-wrapper">
       <div class="dialog-wrapper-detail">1121221</div>
       <div class="dialog-wrapper-close">
         <svg
@@ -48,7 +48,7 @@
           viewBox="0 0 48 48"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          @click.stop.prevent="handleDialog"
+          @click.stop.prevent="closeDialog"
         >
           <path d="M8 8L40 40" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M8 40L40 8" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
@@ -59,10 +59,20 @@
 </template>
 
 <script>
+import { disableGestureBack } from '@/utils/back-control'
 export default {
   name: 'SellHeader',
+  beforeRouteLeave(to, from, next) {
+    if (this.flag) {
+      next(false)
+    } else {
+      next(true)
+    }
+  },
   data() {
     return {
+      flag: true,
+      cleanBackHandler: null,
       seller: null,
       dialog: null
     }
@@ -87,8 +97,14 @@ export default {
         this.seller = null
       }
     },
-    handleDialog() {
-      this.dialog = !this.dialog
+    openDialog() {
+      this.cleanBackHandler = disableGestureBack()
+      this.dialog = true
+    },
+    closeDialog() {
+      this.cleanBackHandler?.()
+      this.dialog = false
+      // ...其他关闭逻辑
     }
   }
 }
@@ -96,8 +112,11 @@ export default {
 
 <style scoped>
 .header {
+  width: 100%;
+  height: 136px;
   position: relative;
   background: rgb(7 17 27 / 50%);
+  flex: 0 0 136px;
 }
 .header .dialog-wrapper {
   position: fixed;

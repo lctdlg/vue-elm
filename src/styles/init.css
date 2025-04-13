@@ -8,7 +8,8 @@ body {
   overflow: hidden;
 }
 body {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: PingFang SC, STHeitiSC-Light, Helvetica-Light, arial, sans-serif, Droid Sans Fallback;
+  line-height: 1;
+  /* 禁止选中否则在移动端会频繁触发 */
+  user-select: none;
 }

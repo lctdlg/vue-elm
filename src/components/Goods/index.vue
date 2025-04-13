@@ -2,20 +2,21 @@
   <div class="goods-wrapper">
     <!-- goods -->
     <div class="goods">
-      <EleScroll ref="menu" class="menu-wrapper" :data="list">
+      <EleScroll ref="menus" class="menu-wrapper" :data="list">
         <div class="menu-items">
           <div
             v-for="(it, index) in list"
             :key="index"
+            ref="menu"
             class="menu-item"
-            :class="[activeIndex === index ? 'active-menu-item' : '']"
-            @click="selectMenu(index)"
+            :class="[currentIndex === index ? 'active-menu-item' : '']"
+            @click="selectMenu(index, $event)"
           >
             <span>{{ it.name }}</span>
           </div>
         </div>
       </EleScroll>
-      <EleScroll ref="foods" class="foods-wrapper" :data="list">
+      <EleScroll ref="foods" class="foods-wrapper" :data="list" :listen-scroll="true" @scroll="scroll">
         <div>
           <div v-for="(item, id) in list" ref="food" :key="id">
             <div class="title">{{ item.name }}</div>
@@ -80,9 +81,11 @@ export default {
   },
   data() {
     return {
-      test: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-      activeIndex: 0,
-      list: []
+      currentIndex: 0,
+      list: [],
+      scrollY: 0,
+      foodsCalcu: [],
+      meunList: []
     }
   },
   computed: {
@@ -97,13 +100,47 @@ export default {
       })
       return foods
     }
+    // currentIndex() {
+    //   for (let i = 0; i < this.foodsCalcu.length; i++) {
+    //     const height1 = this.foodsCalcu[i]
+    //     const height2 = this.foodsCalcu[i + 1]
+    //     if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+    //       this.$refs.menus.scrollToElement(this.$refs.menu[i], 200)
+    //       return i
+    //     }
+    //   }
+    //   return 0
+    // }
   },
-  created() {},
   async mounted() {
     await this.fetchData()
-    // this.lazyImg()
+    this.initFoodsCalcu()
+  },
+  activated() {
+    console.log('keep激活了')
+  },
+  deactivated() {
+    console.log('keep离开了')
   },
   methods: {
+    /**
+     * foods区域滚动时返回的滚动信息
+     * 用来实现menus区域的滚动和高亮
+     */
+    scroll(e) {
+      // Math.abs 负数转为正数  Math.abs 四舍五入取整
+      this.scrollY = Math.abs(Math.round(e.y))
+      this.handleContentScroll()
+    },
+    handleContentScroll() {
+      const index = this.foodsCalcu.findIndex((top, i) => {
+        return this.scrollY >= top && this.scrollY < (this.foodsCalcu[i + 1] || Infinity)
+      })
+      if (index !== -1 && index !== this.currentIndex) {
+        this.currentIndex = index
+        this.$refs.menus.scrollToElement(this.$refs.menu[index], 200)
+      }
+    },
     async fetchData() {
       try {
         const response = await fetch('api/goods.json', {
@@ -120,9 +157,25 @@ export default {
         this.list = null
       }
     },
-    selectMenu(index) {
+    selectMenu(index, event) {
+      if (!event._constructed) {
+        // 过滤掉原生的js点击事件（原生的js点击事件没有_constructed属性）
+        return
+      }
+      this.currentIndex = index
       this.$refs.foods.scrollToElement(this.$refs.food[index], 200)
-      this.activeIndex = index
+    },
+    initFoodsCalcu() {
+      this.$nextTick(() => {
+        const foodlist = this.$refs.food
+        this.meunList = this.$refs.menu
+        let height = 0
+        this.foodsCalcu.push(height)
+        foodlist.forEach((el) => {
+          height += el.clientHeight
+          this.foodsCalcu.push(height)
+        })
+      })
     },
     // 减少
     increase(id, index, e) {
@@ -140,20 +193,15 @@ export default {
         this.list[id]['foods'][index].count--
       }
     }
-    // lazyImg() {
-    //   const observer = new IntersectionObserver((entries, observer) => {
-    //     console.log(entries, observer)
-    //   })
-    //   this.$refs.imgDom.forEach((el) => {
-    //     observer.observe(el)
-    //   })
-    //   // observer()
-    // }
   }
 }
 </script>
 <style scoped>
 .goods-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
   position: relative;
 }
@@ -168,6 +216,7 @@ export default {
   display: flex;
 }
 .goods .foods-wrapper {
+  position: relative;
   flex: 1;
   overflow: hidden;
 }
@@ -196,6 +245,7 @@ export default {
 .foods-item .container .name {
   font-size: 14px;
   color: #333;
+  margin: 2px 0 8px;
 }
 .foods-item .container .extra span {
   font-size: 10px;
@@ -203,8 +253,9 @@ export default {
   padding-right: 8px;
 }
 .foods-item .container .description {
-  font-size: 10px;
+  font-size: 12px;
   color: #999;
+  margin-bottom: 8px;
 }
 .foods-item .container .price .now {
   font-size: 14px;
@@ -223,6 +274,7 @@ export default {
 .goods .menu-wrapper {
   overflow: hidden;
   flex: 0 0 80px;
+  width: 80px;
 }
 .menu-items .menu-item {
   padding: 0 10px;

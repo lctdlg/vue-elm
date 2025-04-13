@@ -1,5 +1,6 @@
 import Vue from 'vue'
 
+// 图片懒加载
 const lazyLoad = {
   inserted: (el, bingding) => {
     /**
@@ -34,4 +35,32 @@ const lazyLoad = {
   }
 }
 
+// 阻止左侧右侧返回默认事件
+const disableBack = {
+  bind(el, binding) {
+    // let startX = 0
+    // const threshold = 60 // 滑动阈值
+    // const touchStart = (e) => {
+    //   startX = e.touches[0].clientX
+    // }
+    // const touchMove = (e) => {
+    //   const deltaX = e.touches[0].clientX - startX
+    //   alert(deltaX, '==')
+    //   // 右滑超过阈值且不在弹窗内容区域滑动
+    //   if (deltaX > threshold && !el.contains(e.target)) {
+    //     e.preventDefault()
+    //   }
+    // }
+    // el._preventSwipeBackHandlers = { touchStart, touchMove }
+    // document.addEventListener('touchstart', touchStart, { passive: false })
+    // document.addEventListener('touchmove', touchMove, { passive: false })
+  },
+  unbind(el) {
+    // const { touchStart, touchMove } = el._preventSwipeBackHandlers || {}
+    // document.removeEventListener('touchstart', touchStart)
+    // document.removeEventListener('touchmove', touchMove)
+  }
+}
+
 Vue.directive('lazy', lazyLoad)
+Vue.directive('disableBack', disableBack)

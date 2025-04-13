@@ -1,91 +1,123 @@
 <template>
-  <div ref="tab" class="tab">
-    <div v-for="(it, index) in routerList" :key="index" class="tab-item">
-      <RouterLink :to="it.url">{{ it.name }}</RouterLink>
+  <div class="tab-wrapper">
+    <div class="container">
+      <div ref="tab" class="tab">
+        <div v-for="(it, index) in tabs" :key="index" class="tab-item" @click="switchTab(index)">
+          <div>{{ it.name }}</div>
+        </div>
+        <div ref="tab-bar" class="tab-bar" :style="{ width: tabWidth + 'px' }"></div>
+      </div>
+      <div class="slide-wrapper">
+        <KeepAlive>
+          <Component :is="activeComponent" ref="component" />
+        </KeepAlive>
+      </div>
     </div>
-    <div ref="tab-bar" class="tab-bar"></div>
   </div>
 </template>
 
 <script>
+import { debounce } from '@/utils/index'
+import Goods from '@/components/Goods'
+import Ratings from '@/components/Ratings'
+import Seller from '@/components/Seller'
 export default {
   name: 'Mytab',
-  data() {
-    return {
-      routerList: [
+  props: {
+    tabs: {
+      type: Array,
+      default: () => [
         {
-          url: '/home/goods',
+          component: Goods,
           name: '商品',
           id: 0
         },
         {
-          url: '/home/ratings',
+          component: Ratings,
           name: '评论',
           id: 1
         },
         {
-          url: '/home/seller',
+          component: Seller,
           name: '商家',
           id: 2
         }
-      ],
-      currentId: 0,
-      width: 0
+      ]
+    }
+  },
+  data() {
+    return {
+      currentIndex: 0,
+      tabWidth: 0,
+      tabPositions: []
+    }
+  },
+  computed: {
+    activeComponent() {
+      const tab = this.tabs.find((t) => t.id === this.currentIndex)
+      return tab ? tab.component : null
+    },
+    currentPosition() {
+      return this.tabPositions[this.currentIndex] || 0
     }
   },
   mounted() {
-    this.init()
-    window.addEventListener('resize', this.init)
+    this.calculateLayout()
+    window.addEventListener('resize', debounce(this.calculateLayout, 1500))
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.init)
+    window.removeEventListener('resize', debounce(this.calculateLayout, 1500))
   },
   methods: {
-    // 方案1
-    // init() {
-    //   this.currentId = this.routerList.filter((it) => it.url === this.$route.path)[0].id
-    //   const width = this.$refs['tab'].clientWidth / this.routerList.length
-    //   const leftLists = []
-    //   this.routerList.forEach((_it, index) => {
-    //     leftLists.push(width * index)
-    //   })
-    //   this.$refs['tab-bar'].style.width = width + 'px'
-    //   this.$refs['tab-bar'].style.left = leftLists[this.currentId] + 'px'
-    //   this.$watch('$route.name', () => {
-    //     this.currentId = this.routerList.filter((it) => it.url === this.$route.path)[0].id
-    //     this.$refs['tab-bar'].style.left = leftLists[this.currentId] + 'px'
-    //   })
-    // }
-    // 方案2
-    init() {
-      this.width = this.$refs['tab'].clientWidth / this.routerList.length
-      this.$refs['tab-bar'].style.width = this.width + 'px'
-      this.currentId = this.routerList.filter((it) => it.url === this.$route.path)[0].id
-      const leftLists = []
-      this.routerList.forEach((_it, index) => {
-        leftLists.push(this.width * index)
-      })
-      this.$refs['tab-bar'].style.transform = `translateX(${leftLists[this.currentId]}px) translateZ(0px)`
-      this.$watch('$route.name', () => {
-        this.currentId = this.routerList.filter((it) => it.url === this.$route.path)[0].id
-        this.$refs['tab-bar'].style.transform = `translateX(${leftLists[this.currentId]}px) translateZ(0px)`
-      })
+    calculateLayout() {
+      const container = this.$refs.tab
+      if (!container) return
+      this.tabWidth = container.clientWidth / this.tabs.length
+      this.tabPositions = this.tabs.map((_, i) => this.tabWidth * i)
+      this.updateTabBar()
+    },
+    updateTabBar() {
+      const tabBar = this.$refs['tab-bar']
+      if (tabBar) {
+        tabBar.style.transform = `translateX(${this.currentPosition}px)`
+      }
+    },
+    switchTab(index) {
+      this.currentIndex = index
+      this.updateTabBar()
     }
   }
 }
 </script>
 
 <style scoped>
+.tab-wrapper {
+  position: fixed;
+  top: 136px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 .tab {
   display: flex;
+  justify-content: center;
   position: relative;
+  width: 100%;
+  flex: 0 0 38px;
+  height: 38px;
+}
+.slide-wrapper {
+  flex: 1;
 }
 .tab .tab-bar {
   position: absolute;
   bottom: 0;
-  /* left: 0; */
-  /* width: 100px; */
-  /* width: var(--width); */
+  left: 0;
   height: 2px;
   background: #f01414;
   /* transition: property duration timing-function delay;
@@ -93,7 +125,9 @@ export default {
   duration：过渡效果持续的时间，单位为秒（s）或毫秒（ms）。
   timing-function：定义动画的速度曲线，如 linear、ease、ease-in、ease-out、ease-in-out 或 cubic-bezier 函数。
   delay：过渡效果开始前的延迟时间，单位为秒（s）或毫秒（ms）。 */
-  transition: all 0.3s linear;
+  /* transition: all 0.3s linear; */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Material Design 标准曲线 */
+  will-change: transform; /* 启用硬件加速 */
 
   /**-moz-animation: ; */
   /* animation: name duration timing-function delay iteration-count direction fill-mode; */
@@ -117,15 +151,5 @@ export default {
 
 .tab-item a.router-link-active {
   color: #f01414;
-}
-
-@keyframes TabsMove {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    /* 变量无法生效 */
-    transform: translateX(var(--left));
-  }
 }
 </style>
