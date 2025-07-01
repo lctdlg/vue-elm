@@ -125,7 +125,7 @@ export default {
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: 0 38px;
-  background-size: contain;
+  background-size: 100%;
   text-align: center;
 }
 .container {

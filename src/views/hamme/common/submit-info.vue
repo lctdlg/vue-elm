@@ -7,26 +7,34 @@
         your needs.
       </div>
       <!-- 表单 -->
-      <div class="formContainer">
+      <div class="form-container">
         <MyForm ref="formRef" :model="formData" :rules="rules">
-          <MyFormItem prop="username">
-            <MyInput v-model="formData.username" placeholder="First Name" />
-          </MyFormItem>
-          <MyFormItem prop="password">
-            <MyInput v-model="formData.password" type="password" placeholder="Last Name" />
-          </MyFormItem>
-          <MyFormItem prop="username">
-            <MyInput v-model="formData.username" placeholder="Phone Number" />
-          </MyFormItem>
-          <MyFormItem prop="password">
-            <MyInput v-model="formData.password" type="password" placeholder="E-Mail" />
-          </MyFormItem>
-          <MyFormItem prop="password">
-            <MyInput
-              v-model="formData.password"
-              placeholder="Specify which product and services you are interested in"
-            />
-          </MyFormItem>
+          <div class="form-container-item">
+            <MyFormItem prop="username">
+              <MyInput v-model="formData.username" placeholder="First Name" />
+            </MyFormItem>
+          </div>
+          <div class="form-container-item">
+            <MyFormItem prop="username">
+              <MyInput v-model="formData.username" placeholder="First Name" />
+            </MyFormItem>
+          </div>
+          <div class="form-container-item">
+            <MyFormItem prop="username">
+              <MyInput v-model="formData.username" placeholder="First Name" />
+            </MyFormItem>
+          </div>
+
+          <div class="form-container-item">
+            <MyFormItem prop="username">
+              <MyInput v-model="formData.username" placeholder="First Name" />
+            </MyFormItem>
+          </div>
+          <div class="form-container-item des">
+            <MyFormItem prop="username">
+              <MyInput v-model="formData.username" placeholder="First Name" />
+            </MyFormItem>
+          </div>
         </MyForm>
       </div>
       <!-- 提交 -->
@@ -101,6 +109,30 @@ export default {
   line-height: 1.6;
   color: #656b8a;
 }
+
+.form-container {
+  margin: 24px 0;
+}
+.form-container form {
+  display: flex;
+  flex-wrap: wrap;
+}
+.form-container-item {
+  flex: 0 0 50%;
+}
+.form-container .form-container-item input {
+  flex: 0 0 324px;
+  width: 324px;
+  height: 48px;
+}
+.form-container .form-container-item.des {
+  flex: 1;
+  height: 96px;
+}
+.form-container .form-container-item.des input {
+  width: 100%;
+  height: 96px;
+}
 @media screen and (max-width: 1200px) {
   .dialog-container {
     padding: 0;
@@ -119,19 +151,18 @@ export default {
     box-sizing: border-box;
     line-height: 1.5;
   }
-}
-.formContainer {
-  margin: 24px 0;
-}
-.formContainer form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-}
-.formContainer form .form-item {
-  flex: 0 0 324px;
-  width: 324px;
-  height: 48px;
+  .form-container form {
+    display: block;
+  }
+  .form-container .form-container-item {
+    width: 100%;
+    height: 48px;
+    margin-bottom: 24px;
+  }
+  .form-container .des {
+    width: 100%;
+    height: 96px;
+  }
 }
 .btn {
   width: 162px;
