@@ -12,6 +12,7 @@
 .ecosystem-partners {
   background: #fff;
   text-align: center;
+  margin-bottom: 200px;
 }
 .h1 {
   /* width: 610px; */
@@ -48,15 +49,17 @@
   background-image: url('../../../assets/生态-合作伙伴.png');
   background-repeat: no-repeat;
   background-size: cover;
-  width: 1228px;
-  height: 0;
+  width: 1272px;
+  height: 760px;
   /* height: 760px; */
-  padding-top: 61.89%;
+  /* padding-top: 61.89%; */
   margin: 0 auto;
 }
 @media screen and (max-width: 1200px) {
   .bg {
     width: 100%;
+    height: 0;
+    padding-top: 59%;
   }
 }
 </style>
