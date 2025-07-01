@@ -163,6 +163,9 @@ export default {
     width: 100%;
     height: 96px;
   }
+  .form-container .form-container-item input {
+    width: 100%;
+  }
 }
 .btn {
   width: 162px;

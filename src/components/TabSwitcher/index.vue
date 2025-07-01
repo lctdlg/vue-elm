@@ -73,4 +73,10 @@ export default {
   background-color: #ffffff;
   color: #0154fc;
 }
+
+@media screen and (max-width: 1200px) {
+  .tab-item {
+    font-size: 12px;
+  }
+}
 </style>
