@@ -36,7 +36,9 @@
           </div>
           <div class="tabs-container-left-btn"><span>read more</span></div>
         </div>
-        <div class="tabs-container-right">1212</div>
+        <div class="tabs-container-right">
+          <div class="tabs-container-right-bg"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -121,13 +123,24 @@ export default {
   font-size: 16px;
 }
 .tabs-container .tabs-container-right {
+  position: relative;
   flex: 0 0 718px;
   width: 718px;
   height: 538px;
-  /* background: red; */
   border-radius: 24px;
-  background: linear-gradient(77.05deg, #4deeff 0%, #0154fc 65%, #733bff 100%);
-  backdrop-filter: blur(20px);
+  background-image: linear-gradient(77.05deg, #4deeff 0%, #0154fc 65%, #733bff 100%);
+  /* url('../../../assets/官网产品图 _crm.png'); */
+  /* backdrop-filter: blur(20px); */
+}
+.tabs-container-right-bg {
+  position: absolute;
+  left: 70px;
+  top: 70px;
+  right: 0;
+  bottom: 0;
+  background-image: url('../../../assets/官网产品图 _crm.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
 }
 
 @media screen and (max-width: 1200px) {
