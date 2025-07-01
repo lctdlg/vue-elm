@@ -7,7 +7,7 @@
         your needs.
       </div>
       <!-- 表单 -->
-      <div>
+      <div class="formContainer">
         <MyForm ref="formRef" :model="formData" :rules="rules">
           <MyFormItem prop="username">
             <MyInput v-model="formData.username" placeholder="First Name" />
@@ -20,6 +20,12 @@
           </MyFormItem>
           <MyFormItem prop="password">
             <MyInput v-model="formData.password" type="password" placeholder="E-Mail" />
+          </MyFormItem>
+          <MyFormItem prop="password">
+            <MyInput
+              v-model="formData.password"
+              placeholder="Specify which product and services you are interested in"
+            />
           </MyFormItem>
         </MyForm>
       </div>
@@ -83,17 +89,49 @@ export default {
 .dialog-container {
   padding: 0 58px 58px 58px;
 }
-.dialog-container .h1 {
+.h1 {
   font-weight: 600;
   font-size: 36px;
   line-height: 1;
   color: #020f2c;
 }
-.dialog-container .h2 {
+.h2 {
   font-weight: 400;
   font-size: 14px;
   line-height: 1.6;
   color: #656b8a;
+}
+@media screen and (max-width: 1200px) {
+  .dialog-container {
+    padding: 0;
+  }
+  .h1 {
+    width: 100%;
+    font-size: 12px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+  .h2 {
+    width: 100%;
+    font-size: 12px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+}
+.formContainer {
+  margin: 24px 0;
+}
+.formContainer form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.formContainer form .form-item {
+  flex: 0 0 324px;
+  width: 324px;
+  height: 48px;
 }
 .btn {
   width: 162px;

@@ -103,7 +103,7 @@
   /* background-size: 915px 915px; */
   background-size: cover;
   background-position: center;
-  margin: 0 auto;
+  margin: 0 auto 260px;
   text-align: center;
 }
 @media screen and (max-width: 1200px) {
@@ -113,29 +113,31 @@
   }
 }
 .h1 {
-  /* width: 289px; */
   height: 58px;
   font-weight: 600;
   font-size: 48px;
   line-height: 1;
   color: #020f2c;
-  /* margin: 0 auto; */
 }
 .h2 {
-  /* width: 557px; */
+  width: 558px;
   height: 52px;
   font-weight: 400;
   font-size: 18px;
   line-height: 26px;
   color: #020f2c;
-  /* margin: 24px auto 48px; */
+  margin: 24px auto 80px;
 }
 @media screen and (max-width: 1200px) {
   .h1 {
     font-size: 24px;
   }
   .h2 {
+    width: 100%;
     font-size: 12px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    line-height: 1.5;
   }
 }
 .cards {
@@ -163,6 +165,8 @@
 @media screen and (max-width: 1200px) {
   .card {
     width: 100%;
+    min-height: 100%;
+    margin-bottom: 12px;
   }
 }
 .card-img {
@@ -179,7 +183,9 @@
   font-size: 20px;
   line-height: 28px;
   color: #020f2c;
-  margin-top: 12px;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  text-align: left;
 }
 .card-h2 {
   font-weight: 400;
@@ -187,7 +193,11 @@
   line-height: 26px;
   color: #656b8a;
   margin-top: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 38px;
+  text-align: left;
+}
+.more {
+  text-align: left;
 }
 .more span {
   font-weight: 500;
@@ -197,5 +207,23 @@
 }
 .more svg {
   vertical-align: middle;
+}
+@media screen and (max-width: 1200px) {
+  .card-h1 {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .card-h2 {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .more span {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .more svg {
+    width: 12px;
+    height: 12px;
+  }
 }
 </style>

@@ -23,20 +23,24 @@
   /* margin: 0 auto; */
 }
 .h2 {
-  /* width: 768px; */
+  width: 768px;
   font-size: 18px;
   font-weight: 400;
   line-height: 26px;
   height: 52px;
   color: #020f2c;
-  /* margin: 0 auto 84px; */
+  margin: 0 auto 84px;
 }
 @media screen and (max-width: 1200px) {
   .h1 {
     font-size: 24px;
   }
   .h2 {
+    width: 100%;
     font-size: 12px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    line-height: 1.5;
   }
 }
 .bg {

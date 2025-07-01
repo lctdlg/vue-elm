@@ -87,8 +87,14 @@ export default {
   background-image: url('../../../assets/grid-bg.png'), url('../../../assets/首图背景.png');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
   text-align: center;
+  height: 1104px;
+}
+@media screen and (max-width: 1200px) {
+  .produciton {
+    height: auto;
+  }
 }
 
 .produciton .produciton-header {
@@ -130,7 +136,7 @@ export default {
   }
 }
 .produciton-header .center .it {
-  margin-right: 32px;
+  margin-right: 48px;
 }
 .produciton-header .center .it span {
   font-weight: 600;
@@ -174,10 +180,12 @@ export default {
   width: 1228px;
   margin: 0 auto;
   position: relative;
+  padding-top: 120px;
 }
 @media screen and (max-width: 1200px) {
   .production-container {
     width: 100%;
+    padding-top: 24px;
   }
 }
 .production-container .h1 {
@@ -198,10 +206,12 @@ export default {
   display: inline-block;
 }
 .production-container .h3 {
+  width: 784px;
   font-weight: 500;
   font-size: 20px;
   color: #656b8a;
-  margin: 24px 0;
+  margin: 26px auto 24px;
+  text-align: center;
 }
 @media screen and (max-width: 1200px) {
   .production-container .h1 {
@@ -211,12 +221,17 @@ export default {
     font-size: 28px;
   }
   .production-container .h3 {
+    width: 100%;
     font-size: 12px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    line-height: 1.5;
+    margin: 12px 0;
   }
 }
 .production-container .input-wrap {
   width: 600px;
-  margin: 48px auto 48px;
+  margin: 0 auto;
 }
 @media screen and (max-width: 750px) {
   .production-container .input-wrap {
@@ -227,10 +242,11 @@ export default {
 }
 
 .production-img {
-  width: 1228px;
+  width: 1200px;
   height: 0;
   margin: 0 auto;
-  padding-top: 49%;
+  /* 624 / 1200 */
+  padding-top: 52%;
   background-image: url('../../../assets/首图产品展示.png');
   background-repeat: no-repeat;
   background-size: contain;
@@ -250,7 +266,7 @@ export default {
   padding-top: 5%;
   background-image: url('../../../assets/白色遮罩.png');
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   background-position: center;
 }
 </style>

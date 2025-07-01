@@ -96,13 +96,12 @@ export default {
   background: #fff;
 }
 .h1 {
-  /* width: 238px; */
   height: 32px;
   font-size: 20px;
   font-weight: 500;
   line-height: 1;
   color: #656b8a;
-  margin: 84px 0 24px;
+  margin: 120px 0 44px;
   text-align: center;
 }
 .bg {

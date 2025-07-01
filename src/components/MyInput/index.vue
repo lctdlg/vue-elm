@@ -31,7 +31,15 @@ export default {
 <style scoped>
 .my-input {
   padding: 6px 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  /* border: 1px solid #ccc; */
+  border-radius: 8px;
+  border: 1px solid #d9dfeb;
+  background: #ffffff;
+  outline: none;
+  /* width: 324px;
+  height: 48px; */
+  width: 100%;
+  min-height: 48px;
+  box-sizing: border-box;
 }
 </style>

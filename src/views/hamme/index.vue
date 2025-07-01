@@ -1,6 +1,6 @@
 <template>
   <div class="haame">
-    <!-- topheader -->
+    <!-- header -->
     <TopHeader />
     <!-- 产品导航 -->
     <ProducitonNav @open="open" />
@@ -68,6 +68,7 @@ export default {
     }
   },
   mounted() {
+    this.handleResize()
     this.debouncedResize = this.debounce(this.handleResize, 200)
     window.addEventListener('resize', this.debouncedResize)
   },
