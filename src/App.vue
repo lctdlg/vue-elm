@@ -1,21 +1,18 @@
 <template>
   <div id="app">
-    <!-- <SellHeader />
-    <MyTab /> -->
-    <Hamme />
+    <SellHeader />
+    <MyTab />
   </div>
 </template>
 
-// <script>
-// import SellHeader from '@/components/SellHeader'
-// import MyTab from '@/components/Tab'
-import Hamme from './views/hamme/index.vue'
+<script>
+import SellHeader from '@/components/SellHeader'
+import MyTab from '@/components/Tab'
 export default {
   name: 'App',
   components: {
-    // SellHeader,
-    // MyTab,
-    Hamme
+    SellHeader,
+    MyTab,
   }
 }
 </script>
