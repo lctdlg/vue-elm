@@ -5,6 +5,7 @@ const { defineConfig } = require('@vue/cli-service')
 // const ratings = appData.ratings
 // const foods = appData.foods
 module.exports = defineConfig({
+  outputDir: 'docs',
   publicPath:
     process.env.NODE_ENV === 'production'
       ? '/vue-elm/' // 替换为你的仓库名称
